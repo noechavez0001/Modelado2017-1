@@ -54,6 +54,7 @@ class ParseData(object):
 
     def errhandle(self, message, protocol):
         protocol.sendLine('ERR:'+message)
+        protocol.sendLine('por favor intente mas tarde')
 
     def get_clients(self):
         return self.clients.keys()

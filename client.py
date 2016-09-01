@@ -34,18 +34,21 @@ class CommandParser(object):
         protocol.unreg = True
         protocol.transport.loseConnection()
         prompt.writeData('Connection with server %s closed.' %(protocol.transport.getPeer()))
+        #mandar mas mensajes aqui
 
     def errhandle(self, protocol, prompt, msg=None):
         if msg:
             prompt.writeData(msg, err=True)
         else:
             prompt.writeData("Something has gone wrong. Don't worry, carry on with your talk", err=True)
+            prompt.writeData("por favor intente mas tarde")
             
 class CommandPrompt(LineReceiver):
     from os import linesep as delimiter
 
     def connectionMade(self):
         self.sendLine('[OK] Connected to shell. Welcome to The chat application!')
+        self.sendLine('Por favor disfrute de la aplicacion')
 
     def lineReceived(self, line):
         if 'NICK' in line:
@@ -83,11 +86,13 @@ class ChatProtocol(LineReceiver):
 
     def connectionMade(self):
         self.factory.cmd.writeData('Connected to server at: %s ' %(self.transport.getPeer()))
+        self.factory.cmd.writeData('Conexion extablecida correctamente')
 
     def connectionLost(self):
         if self.unreg:
             return
         self.factory.cmd.writeData('Lost connection to server at: %s ' %(self.transport.getPeer())) 
+        self.factory.cmd.writeData('por favor reinicie la aplicacion')
 
     def lineReceived(self, line):
         self.factory.cmdparser.parseIncomingFromServer(self, self.factory.cmd, line)
