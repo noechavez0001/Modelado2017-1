@@ -34,6 +34,7 @@ class CommandParser(object):
         protocol.unreg = True
         protocol.transport.loseConnection()
         prompt.writeData('Connection with server %s closed.' %(protocol.transport.getPeer()))
+        prompt.writeData('por favor registrate para poder continuar')
         #mandar mas mensajes aqui
 
     def errhandle(self, protocol, prompt, msg=None):
@@ -59,7 +60,7 @@ class CommandPrompt(LineReceiver):
 
                 return self.factory.protocol_instance.sendLine('REGISTER:%s' %(data.lstrip().rstrip()))
             except ValueError:
-                pass
+                print 'someting strange happend'
 
         if 'QUIT' in line:
             try:
@@ -67,7 +68,7 @@ class CommandPrompt(LineReceiver):
                 if cmd == 'QUIT':
                     return self.factory.protocol_instance.sendLine('UNREGISTER:')
             except ValueError:
-                pass
+                print 'someting strange happend'
         self.factory.protocol_instance.sendLine('CHAT:'+line)
 
     def writeData(self, line, err=None):
